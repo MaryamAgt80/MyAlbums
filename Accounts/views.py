@@ -83,6 +83,8 @@ class LoginUser(APIView):
             user = User.objects.filter(username=loginform.data['username']).first()
             if user is not None:
                 print(user.username)
+                if not user.is_active:
+                    return Response({'status': status.HTTP_203_NON_AUTHORITATIVE_INFORMATION, 'detail': 'Your account is not active'})
                 password = loginform.data['password']
                 if user.check_password(password):
                     login(request, user)
